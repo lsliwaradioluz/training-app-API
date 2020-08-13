@@ -5,6 +5,7 @@ const fileSchema = mongoose.Schema(
     name: String,
     url: String,
     public_id: String, 
+    format: String, 
   },
   {
     timestamps: true,

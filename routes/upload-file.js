@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary").v2;
 const multer = require('multer')
 const fs = require('fs')
 const File = require('../models/file')
@@ -53,7 +53,7 @@ router.post("/api/upload-file", async (req, res) => {
 
     const filepath = `${req.file.destination}/${req.file.filename}`
 
-    cloudinary.v2.uploader.upload(
+    cloudinary.uploader.upload(
       filepath,
       configObj,
       async (error, result) => {
@@ -66,6 +66,7 @@ router.post("/api/upload-file", async (req, res) => {
           name: result.original_filename, 
           url: result.url,
           public_id: result.public_id,
+          format: result.format,
         });
 
         const savedFile = await file.save();
@@ -85,7 +86,18 @@ router.post("/api/upload-file", async (req, res) => {
 router.post('/api/delete-file', async (req, res) => {
   const fileId = req.body.id ? req.body.id : req.body._id
   const deletedFile = await File.findByIdAndRemove(fileId)
-  cloudinary.uploader.destroy(deletedFile.public_id);
+  let resource_type
+
+  if (deletedFile.format == "mp4") {
+    resource_type = "video"
+  } else {
+    resource_type = "image"
+  }
+
+  await cloudinary.uploader.destroy(deletedFile.public_id, {
+    invalidate: true,
+    resource_type,
+  });
   res.send(deletedFile)
 })
 
