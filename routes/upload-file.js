@@ -27,6 +27,7 @@ router.post("/api/upload-file", async (req, res) => {
   const upload = multer({ storage }).single('image')
   upload(req, res, (err) => {
     if (err) {
+      console.log(err)
       res.send(err)
       return
     }
@@ -59,6 +60,7 @@ router.post("/api/upload-file", async (req, res) => {
       async (error, result) => {
         if (error) {
           res.send(error)
+          console.log(error)
           return
         }
         
