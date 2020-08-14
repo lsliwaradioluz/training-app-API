@@ -36,23 +36,23 @@ async function populateWorkout(workout) {
 module.exports = {
   customScalarResolver,
   // FAMILIES
-  async families() {
-    const families = await Family.find();
-    let exercises = await Exercise.find().populate("image");
+  async families({ userId }) {
+    const families = await Family.find({ user: userId });
+    let exercises = await Exercise.find().populate("image").populate("family");
+
     const editedFamilies = families.map((family) => {
       const familyId = family._id.toString();
       const familyExercises = [];
       exercises.forEach((exercise) => {
-        if (exercise.family == familyId) {
+        if (exercise.family._id == familyId) {
           familyExercises.push(exercise);
         }
       });
       return {
         id: family.id,
         name: family.name,
-        alias: family.alias,
-        description: family.description,
         exercises: familyExercises,
+        createdAt: family.createdAt
       };
     });
     return editedFamilies;
@@ -61,7 +61,6 @@ module.exports = {
     const family = await Family.findById(id);
     let exercises = await Exercise.find({ family: id }).populate("image");
     family.exercises = exercises;
-
     return family;
   },
   async createFamily({ input }) {
@@ -73,8 +72,6 @@ module.exports = {
     const familyId = input.id;
     const family = {
       name: input.name,
-      alias: input.alias,
-      description: input.description,
     };
     const updatedFamily = await Family.findByIdAndUpdate(familyId, family, {
       new: true,
@@ -91,11 +88,10 @@ module.exports = {
       .populate("image")
       .populate("family");
 
-    // family.id = family._id.toString();
     return exercise;
   },
   async createExercise({ input }) {
-    const exercise = new Exercise(input).populate("image");
+    const exercise = new Exercise(input);
     const savedExercise = await exercise.save();
     return savedExercise;
   },
@@ -192,7 +188,13 @@ module.exports = {
     } else {
       user = await User.findOne({ email }).populate("image");
     }
-    user.workouts = await Workout.find({ user: id }).sort({ scheduled: -1 });
+    
+    const workouts = await Workout.find({ user: id }).sort({ scheduled: -1 });
+    const populatedWorkouts = workouts.map(workout => {
+      return populateWorkout(workout)
+    })
+
+    user.workouts = populatedWorkouts
     return user;
   },
   async updateUser({ input }) {

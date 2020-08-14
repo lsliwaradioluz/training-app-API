@@ -35,18 +35,18 @@ module.exports = buildSchema(`
 
   type Exercise {
     id: String, 
-    name: String, 
-    alias: String,
+    name: String,
     family: Family,
     image: File, 
   }
 
   type Family {
     id: String, 
-    name: String, 
-    alias: String, 
+    name: String,
     description: String,
     exercises: [Exercise],
+    user: ID, 
+    createdAt: Date, 
   }
 
   type workoutSection {
@@ -125,29 +125,25 @@ module.exports = buildSchema(`
   }
 
   input createFamilyInput {
-    name: String, 
-    alias: String, 
-    description: String, 
+    name: String,
+    user: ID 
   }
 
   input updateFamilyInput {
     id: String, 
-    name: String, 
-    alias: String, 
-    description: String, 
+    name: String,
+    user: ID
   }
 
   input createExerciseInput {
-    name: String, 
-    alias: String, 
+    name: String,
     family: ID, 
     image: ID,
   }
 
   input updateExerciseInput {
     id: ID, 
-    name: String, 
-    alias: String, 
+    name: String,
     family: ID, 
     image: ID, 
   }
@@ -172,7 +168,7 @@ module.exports = buildSchema(`
   }
 
   type RootQuery {
-    families: [Family],
+    families(userId: ID): [Family],
     family(id: ID): Family, 
     exercise(id: ID): Exercise,
     users(id: ID): [User],
