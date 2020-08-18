@@ -122,6 +122,7 @@ module.exports = buildSchema(`
     admin: Boolean, 
     active: Boolean,
     user: ID, 
+    image: ID,
   }
 
   input createFamilyInput {

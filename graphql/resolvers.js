@@ -37,7 +37,7 @@ module.exports = {
   customScalarResolver,
   // FAMILIES
   async families({ userId }) {
-    const families = await Family.find({ user: userId });
+    const families = await Family.find({ user: userId }).sort({ name: 1 });
     let exercises = await Exercise.find().populate("image").populate("family");
 
     const editedFamilies = families.map((family) => {
