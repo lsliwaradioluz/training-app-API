@@ -1,12 +1,14 @@
 # Piti - API
 
-RESTful API dla aplikacji treningowej Piti, napisane z pomocą Node.js, Express, a także GraphQL. 
+RESTful API for the Piti training app, created with Node.js, Express and GraphQL. 
 
-## Historia 
+## History 
 
-Początkowo backend aplikacji powstał przy użyciu Strapi - Headless CMS. Było to jednak zbyt "grube" rozwiązanie, ze względu na to, że wszystkie dane aplikacji mogą być dodawane, modyfikowane oraz usuwane z jej poziomu. Niepotrzebny był więc panel administracyjny udostepniamy przez Strapi, wystaeczyło samo API.
+At first the app's backend was created using Strapi - Headless CMS. It was, however, an overkill since all of the application data was managed from the frontend level anyway. The Strapi admin panel was thereby unnecessary, just the API was enough. 
 
-Napisałem więc API samodzielnie. Dane pobierane są za pośrednictwem ścieżki udostępnianej przez GraphQL. O ich kształcie i sposobach pobierania, modyfikowania oraz usuwania decydują schemas i resolvers. Nowopowstałe API jest odwzorowaniem tego, które zostało utworzone podczas korzystania ze Strapi. 
+I decided to create it myself. The data is created, deleted, fetched or modified using a GraphQL endpoint. Its shape and means to access it is determined by the GraphQL schemas and resolvers. The new API is basically a copy of the one which was created with Strapi.  
+
+I realized, however, that after connecting the app to the new API, it started to work faster.
 
 ## Local testing
 
