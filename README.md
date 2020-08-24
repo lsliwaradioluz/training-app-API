@@ -2,7 +2,7 @@
 
 RESTful API dla aplikacji treningowej Piti, napisane z pomocą Node.js, Express, a także GraphQL. 
 
-# Historia 
+## Historia 
 
 Początkowo backend aplikacji powstał przy użyciu Strapi - Headless CMS. Było to jednak zbyt "grube" rozwiązanie, ze względu na to, że wszystkie dane aplikacji mogą być dodawane, modyfikowane oraz usuwane z jej poziomu. Niepotrzebny był więc panel administracyjny udostepniamy przez Strapi, wystaeczyło samo API.
 
