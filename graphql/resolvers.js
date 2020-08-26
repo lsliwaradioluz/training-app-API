@@ -155,6 +155,7 @@ module.exports = {
       error.code = 401;
       throw error;
     }
+
     const passwordMatches = await bcrypt.compare(password, user.password);
     if (!passwordMatches) {
       const error = new Error("Password is incorrect");
@@ -198,6 +199,9 @@ module.exports = {
     return user;
   },
   async updateUser({ input }) {
+    if (input.password) {
+      input.password = await bcrypt.hash(input.password, 12);
+    }
     const userId = input.id
     const user = input
     delete user.id
